@@ -15,7 +15,8 @@ const Action = Union({
 });
 
 const stopwords = Immutable.OrderedSet(
-  ['and','this','a','i','you','the','.', ',', '!', '—', '?'])
+  ['a','i','is','an','you','the','and','this','.', ',', '!', '?','—', 'line break'])
+
 const Model = Record({
   words: Immutable.List([]),
   options: Immutable.OrderedSet(Immutable.Range(0,25).map(selectRandom)),
@@ -44,7 +45,7 @@ const view = (model, dispatch) => (
       justifyContent:'space-between',
     }}>
     <div style={{
-        width: '250px',
+        width: '350px',
         margin: 'auto',
        }}>
     {model.get('words').map(item => (
@@ -53,9 +54,9 @@ const view = (model, dispatch) => (
     </div>
     <p>
         {model.get('options').merge(stopwords).map(word => (
-          <Tile key={word} text={word} onEmit={()=>dispatch.Add(word)}/>
+          <Tile key={word} text={word} onEmit={dispatch.Add}/>
         )).toArray()}
-      <Tile text='Remove one' onClick={dispatch.Remove}/>
+      <Tile text='backspace' onEmit={dispatch.Remove}/>
     </p>
   </div>
 );

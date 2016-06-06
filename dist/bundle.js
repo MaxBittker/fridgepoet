@@ -20373,7 +20373,8 @@
 	  Remove: null
 	});
 
-	var stopwords = _immutable2.default.OrderedSet(['and', 'this', 'a', 'i', 'you', 'the', '.', ',', '!', '—', '?']);
+	var stopwords = _immutable2.default.OrderedSet(['a', 'i', 'is', 'an', 'you', 'the', 'and', 'this', '.', ',', '!', '?', '—', 'line break']);
+
 	var Model = (0, _immutable.Record)({
 	  words: _immutable2.default.List([]),
 	  options: _immutable2.default.OrderedSet(_immutable2.default.Range(0, 25).map(selectRandom))
@@ -20416,7 +20417,7 @@
 	    _react2.default.createElement(
 	      'div',
 	      { style: {
-	          width: '250px',
+	          width: '350px',
 	          margin: 'auto'
 	        } },
 	      model.get('words').map(function (item) {
@@ -20427,11 +20428,9 @@
 	      'p',
 	      null,
 	      model.get('options').merge(stopwords).map(function (word) {
-	        return _react2.default.createElement(_tile2.default, { key: word, text: word, onEmit: function onEmit() {
-	            return dispatch.Add(word);
-	          } });
+	        return _react2.default.createElement(_tile2.default, { key: word, text: word, onEmit: dispatch.Add });
 	      }).toArray(),
-	      _react2.default.createElement(_tile2.default, { text: 'Remove one', onClick: dispatch.Remove })
+	      _react2.default.createElement(_tile2.default, { text: 'backspace', onEmit: dispatch.Remove })
 	    )
 	  );
 	};
@@ -26196,6 +26195,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _immutable = __webpack_require__(169);
+
+	var _immutable2 = _interopRequireDefault(_immutable);
+
 	var _spindleUi = __webpack_require__(171);
 
 	var _spindleUi2 = _interopRequireDefault(_spindleUi);
@@ -26203,10 +26206,23 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var propTypes = {
-	  text: _react.PropTypes.string.isRequired
+	  text: _react.PropTypes.string.isRequired,
+	  onEmit: _react.PropTypes.fn
 	};
 
-	var view = function view(_, __, props) {
+	var Model = (0, _immutable.Record)({
+	  word: _immutable2.default.List([]),
+	  onClick: undefined
+	});
+
+	var init = function init(props) {
+	  return (0, _spindleUi.Update)({ model: Model().set('word', props.text).set('onClick', props.onEmit) });
+	};
+
+	var view = function view(model, dispatch, _) {
+	  var word = model.get('word');
+	  var _onClick = model.get('onClick');
+	  if (word === 'line break' && !_onClick) return _react2.default.createElement('br', null);
 	  return _react2.default.createElement(
 	    'span',
 	    { style: {
@@ -26216,13 +26232,16 @@
 	        margin: '5px 1px',
 	        padding: '2px 4px',
 	        backgroundColor: '#f5f5f5',
-	        boxShadow: '1px 1px 2px #111' },
-	      onClick: props.onEmit },
-	    props.text
+	        boxShadow: '1px 1px 2px #111',
+	        transform: 'rotate(-1deg)' },
+	      onClick: function onClick() {
+	        return _onClick(word);
+	      } },
+	    word
 	  );
 	};
 
-	module.exports = (0, _spindleUi2.default)('Tile', { propTypes: propTypes, view: view });
+	module.exports = (0, _spindleUi2.default)('Tile', { propTypes: propTypes, init: init, view: view });
 
 /***/ },
 /* 173 */
@@ -26233,7 +26252,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = ['about', 'above', 'ache', 'ad', 'after', 'all', 'am', 'am', 'an', 'an', 'apparatus', 'are', 'are', 'arm', 'as', 'as', 'as', 'as', 'ask', 'at', 'at', 'at', 'away', 'bare', 'be', 'beat', 'beauty', 'bed', 'beneath', 'bitter', 'black', 'blood', 'blow', 'blue', 'boil', 'boy', 'breast', 'but', 'but', 'but', 'but', 'butt', 'by', 'by', 'can', 'chant', 'chocolate', 'cool', 'could', 'crush', 'cryday', 'death', 'delirious', 'diamond', 'did', 'do', 'do', 'dream', 'dress', 'drive', 'drool', 'drunk', 'eat', 'ed', 'ed', 'ed', 'ed', 'egg', 'elaborate', 'enormous', 'er', 'es', 'est', 'fast', 'feet', 'fiddle', 'finger', 'fluff', 'for', 'forest', 'frantic', 'friend', 'from', 'from', 'garden', 'girl', 'go', 'goddess', 'gorgeous', 'gown', 'hair', 'has', 'have', 'have', 'he', 'he', 'head', 'heave', 'her', 'her', 'here', 'him', 'his', 'his', 'honey', 'hot', 'howII', 'if', 'in', 'in', 'in', 'ing', 'ing', 'ing', 'ing', 'ing', 'ing', 'is', 'is', 'is', 'is', 'is', 'it', 'it', 'it', 'juice', 'lake', 'language', 'languid', 'lather', 'lazy', 'less', 'let', 'lick', 'lie', 'life', 'light', 'like', 'like', 'like', 'live', 'love', 'luscious', 'lust', 'ly', 'ly', 'ly', 'ly', 'mad', 'man', 'me', 'me', 'me', 'mean', 'meat', 'men', 'milk', 'mist', 'moan', 'moon', 'mother', 'music', 'must', 'my', 'my', 'my', 'need', 'never', 'no', 'no', 'not', 'not', 'of', 'of', 'of', 'of', 'on', 'on', 'one', 'or', 'our', 'over', 'pant', 'peach', 'petal', 'picture', 'pink', 'play', 'please', 'pole', 'pound', 'puppy', 'purple', 'putr', 'rain', 'raw', 'recall', 'red', 'repulsive', 'rip', 'rock', 'rose', 'run', 'rustsss', 'sssad', 'said', 'sausage', 'say', 'scream', 'sea', 'see', 'shadow', 'she', 'she', 'shine', 'ship', 'shot', 'show', 'sing', 'sit', 'skin', 'sky', 'sleep', 'smear', 'smell', 'smooth', 'so', 'soar', 'some', 'sordid', 'spray', 'spring', 'still', 'stop', 'storm', 'suit', 'summer', 'sun', 'sweat', 'sweet', 'swim', 'symphony', 'their', 'there', 'these', 'they', 'those', 'though', 'thousand', 'through', 'time', 'tiny', 'to', 'to', 'to', 'together', 'tongue', 'trudge', 'TV', 'ugly', 'up', 'urge', 'us', 'use', 'want', 'want', 'was', 'watch', 'water', 'wax', 'we', 'we', 'were', 'what', 'when', 'whisper', 'who', 'why', 'will', 'wind', 'with', 'with', 'woman', 'worship', 'yet'];
+	exports.default = ['about', 'above', 'ache', 'ad', 'after', 'all', 'am', 'am', 'apparatus', 'are', 'are', 'arm', 'as', 'as', 'as', 'as', 'ask', 'at', 'at', 'at', 'away', 'bare', 'be', 'beat', 'beauty', 'bed', 'beneath', 'bitter', 'black', 'blood', 'blow', 'blue', 'boil', 'boy', 'breast', 'but', 'but', 'but', 'but', 'butt', 'by', 'by', 'can', 'chant', 'chocolate', 'cool', 'could', 'crush', 'cryday', 'death', 'delirious', 'diamond', 'did', 'do', 'do', 'dream', 'dress', 'drive', 'drool', 'drunk', 'eat', 'ed', 'ed', 'ed', 'ed', 'egg', 'elaborate', 'enormous', 'er', 'es', 'est', 'fast', 'feet', 'fiddle', 'finger', 'fluff', 'for', 'forest', 'frantic', 'friend', 'from', 'from', 'garden', 'girl', 'go', 'goddess', 'gorgeous', 'gown', 'hair', 'has', 'have', 'have', 'he', 'he', 'head', 'heave', 'her', 'her', 'here', 'him', 'his', 'his', 'honey', 'hot', 'howII', 'if', 'in', 'in', 'in', 'ing', 'ing', 'ing', 'ing', 'ing', 'ing', 'is', 'is', 'is', 'is', 'is', 'it', 'it', 'it', 'juice', 'lake', 'language', 'languid', 'lather', 'lazy', 'less', 'let', 'lick', 'lie', 'life', 'light', 'like', 'like', 'like', 'live', 'love', 'luscious', 'lust', 'ly', 'ly', 'ly', 'ly', 'mad', 'man', 'me', 'me', 'me', 'mean', 'meat', 'men', 'milk', 'mist', 'moan', 'moon', 'mother', 'music', 'must', 'my', 'my', 'my', 'need', 'never', 'no', 'no', 'not', 'not', 'of', 'of', 'of', 'of', 'on', 'on', 'one', 'or', 'our', 'over', 'pant', 'peach', 'petal', 'picture', 'pink', 'play', 'please', 'pole', 'pound', 'puppy', 'purple', 'putrid', 'rain', 'raw', 'recall', 'red', 'repulsive', 'rip', 'rock', 'rose', 'run', 'rusts', 'sad', 'said', 'sausage', 'say', 'scream', 'sea', 'see', 'shadow', 'she', 'she', 'shine', 'ship', 'shot', 'show', 'sing', 'sit', 'skin', 'sky', 'sleep', 'smear', 'smell', 'smooth', 'so', 'soar', 'some', 'sordid', 'spray', 'spring', 'still', 'stop', 'storm', 'suit', 'summer', 'sun', 'sweat', 'sweet', 'swim', 'symphony', 'their', 'there', 'these', 'they', 'those', 'though', 'thousand', 'through', 'time', 'tiny', 'to', 'to', 'to', 'together', 'tongue', 'trudge', 'TV', 'ugly', 'up', 'urge', 'us', 'use', 'want', 'want', 'was', 'watch', 'water', 'wax', 'we', 'we', 'were', 'what', 'when', 'whisper', 'who', 'why', 'will', 'wind', 'with', 'with', 'woman', 'worship', 'yet'];
 
 /***/ }
 /******/ ]);
