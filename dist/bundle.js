@@ -26254,6 +26254,7 @@
 	        border: '1px solid #222',
 	        margin: '5px 1px',
 	        padding: '2px 4px',
+	        fontSize: '22px',
 	        backgroundColor: '#f5f5f5',
 	        boxShadow: '1px 1px 2px #111',
 	        transform: 'rotate(-1deg)' },
