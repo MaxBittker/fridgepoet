@@ -20410,7 +20410,7 @@
 	            word: word.toString()
 	          });
 	        }).update('options', function (list) {
-	          return list.delete(word).takeLast(25).merge(predictions(word, 4));
+	          return list.delete(word).takeLast(20).merge(predictions(word, 4));
 	        }) });
 	    },
 	    Remove: function Remove() {

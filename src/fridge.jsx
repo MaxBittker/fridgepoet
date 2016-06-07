@@ -45,7 +45,7 @@ const update = (action, model) => Action.match(action, {
           id: list.size,
           word: word.toString()
         }))
-        .update('options', list => list.delete(word).takeLast(25).merge(predictions(word, 4)))}),
+        .update('options', list => list.delete(word).takeLast(20).merge(predictions(word, 4)))}),
   Remove: () =>
     Update({ model: model.update('words', list => list.pop()) }),
 });
