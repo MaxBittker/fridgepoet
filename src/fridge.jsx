@@ -46,6 +46,7 @@ const view = (model, dispatch) => (
     }}>
     <div style={{
         width: '350px',
+        maxWidth: '100%',
         margin: 'auto',
        }}>
     {model.get('words').map(item => (

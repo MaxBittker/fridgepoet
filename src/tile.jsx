@@ -25,6 +25,7 @@ const view = (model, dispatch, _) => {
   if(word==='line break' && !onClick)
     return (<br/>)
   return (<span style={{
+    cursor:'pointer',
     fontFamily: 'Georgia, serif',
     display: 'inline-block',
     border: '1px solid #222',

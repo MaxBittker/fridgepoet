@@ -20418,6 +20418,7 @@
 	      'div',
 	      { style: {
 	          width: '350px',
+	          maxWidth: '100%',
 	          margin: 'auto'
 	        } },
 	      model.get('words').map(function (item) {
@@ -26226,6 +26227,7 @@
 	  return _react2.default.createElement(
 	    'span',
 	    { style: {
+	        cursor: 'pointer',
 	        fontFamily: 'Georgia, serif',
 	        display: 'inline-block',
 	        border: '1px solid #222',
