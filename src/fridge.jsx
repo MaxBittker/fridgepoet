@@ -4,6 +4,8 @@ import { Union } from 'results';
 import Spindle, { Update } from 'spindle-ui';
 import Tile from './tile.jsx';
 import markovModel from '../chain.json'
+// import markovModel from '../eliotchain.json'
+
 
 const selectRandom = (dict) => {
   const dictionary = Object.keys(dict)
@@ -13,7 +15,6 @@ const selectRandom = (dict) => {
 const sample = (dict, n) => Immutable.Range(0,n).map(()=>selectRandom(dict))
 
 const predictions = (word, n) => {
-  console.log(word)
   const options = markovModel[word]
   if(options!==undefined){
     return Immutable.OrderedSet( sample( options,n))
@@ -31,7 +32,7 @@ const stopwords = Immutable.OrderedSet(
 
 const Model = Record({
   words: Immutable.List([]),
-  options: Immutable.OrderedSet(sample(markovModel, 25)),
+  options: Immutable.OrderedSet(sample(markovModel, 17)),
 });
 
 const init = () =>
@@ -45,7 +46,7 @@ const update = (action, model) => Action.match(action, {
           id: list.size,
           word: word.toString()
         }))
-        .update('options', list => list.delete(word).takeLast(20).merge(predictions(word, 4)))}),
+        .update('options', list => list.delete(word).takeLast(17).merge(predictions(word, 4)))}),
   Remove: () =>
     Update({ model: model.update('words', list => list.pop()) }),
 });
@@ -63,7 +64,7 @@ const view = (model, dispatch) => (
         margin: 'auto',
        }}>
     {model.get('words').map(item => (
-      <Tile text={item.word} key={item.id} />
+      <Tile text={item.word} key={item.id} onEmit={dispatch.Add}/>
     )).toArray()}
     </div>
     <p style={{
@@ -73,7 +74,7 @@ const view = (model, dispatch) => (
         justifyContent: 'flex-end'
       }}>
         {model.get('options').merge(stopwords).map(word => (
-          <Tile key={word} text={word} onEmit={dispatch.Add}/>
+          <Tile key={word} text={word} isControl={true} onEmit={dispatch.Add}/>
         )).toArray()}
       <Tile text='backspace' onEmit={dispatch.Remove}/>
     </p>

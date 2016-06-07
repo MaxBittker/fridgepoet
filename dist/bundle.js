@@ -20364,6 +20364,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	// import markovModel from '../eliotchain.json'
+
 	var selectRandom = function selectRandom(dict) {
 	  var dictionary = Object.keys(dict);
 	  return dictionary[Math.random() * dictionary.length | 0];
@@ -20376,7 +20378,6 @@
 	};
 
 	var predictions = function predictions(word, n) {
-	  console.log(word);
 	  var options = _chain2.default[word];
 	  if (options !== undefined) {
 	    return _immutable2.default.OrderedSet(sample(options, n));
@@ -20393,7 +20394,7 @@
 
 	var Model = (0, _immutable.Record)({
 	  words: _immutable2.default.List([]),
-	  options: _immutable2.default.OrderedSet(sample(_chain2.default, 25))
+	  options: _immutable2.default.OrderedSet(sample(_chain2.default, 17))
 	});
 
 	var init = function init() {
@@ -20410,7 +20411,7 @@
 	            word: word.toString()
 	          });
 	        }).update('options', function (list) {
-	          return list.delete(word).takeLast(20).merge(predictions(word, 4));
+	          return list.delete(word).takeLast(17).merge(predictions(word, 4));
 	        }) });
 	    },
 	    Remove: function Remove() {
@@ -20438,7 +20439,7 @@
 	          margin: 'auto'
 	        } },
 	      model.get('words').map(function (item) {
-	        return _react2.default.createElement(_tile2.default, { text: item.word, key: item.id });
+	        return _react2.default.createElement(_tile2.default, { text: item.word, key: item.id, onEmit: dispatch.Add });
 	      }).toArray()
 	    ),
 	    _react2.default.createElement(
@@ -20450,7 +20451,7 @@
 	          justifyContent: 'flex-end'
 	        } },
 	      model.get('options').merge(stopwords).map(function (word) {
-	        return _react2.default.createElement(_tile2.default, { key: word, text: word, onEmit: dispatch.Add });
+	        return _react2.default.createElement(_tile2.default, { key: word, text: word, isControl: true, onEmit: dispatch.Add });
 	      }).toArray(),
 	      _react2.default.createElement(_tile2.default, { text: 'backspace', onEmit: dispatch.Remove })
 	    )
@@ -26234,17 +26235,19 @@
 
 	var Model = (0, _immutable.Record)({
 	  word: _immutable2.default.List([]),
+	  isControl: false,
 	  onClick: undefined
 	});
 
 	var init = function init(props) {
-	  return (0, _spindleUi.Update)({ model: Model().set('word', props.text).set('onClick', props.onEmit) });
+	  return (0, _spindleUi.Update)({ model: Model().set('word', props.text).set('onClick', props.onEmit).set('isControl', props.isControl) });
 	};
 
 	var view = function view(model, dispatch, _) {
 	  var word = model.get('word');
 	  var _onClick = model.get('onClick');
-	  if (word === 'line break' && !_onClick) return _react2.default.createElement('br', null);
+	  var isControl = model.get('isControl');
+	  if (word === 'line break' && !isControl) return _react2.default.createElement('br', null);
 	  return _react2.default.createElement(
 	    'span',
 	    { style: {
@@ -26257,7 +26260,7 @@
 	        fontSize: '22px',
 	        backgroundColor: '#f5f5f5',
 	        boxShadow: '1px 1px 2px #111',
-	        transform: 'rotate(-1deg)' },
+	        transform: 'rotate(' + (Math.random() * .4 + .8).toString() + 'deg)' },
 	      onClick: function onClick() {
 	        return _onClick(word);
 	      } },

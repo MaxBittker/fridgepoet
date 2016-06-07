@@ -11,18 +11,23 @@ const propTypes = {
 
 const Model = Record({
   word: Immutable.List([]),
+  isControl: false,
   onClick: undefined,
 });
 
 
 const init = (props) =>
-  Update({ model: Model().set('word', props.text).set('onClick', props.onEmit) })
+  Update({ model: Model()
+    .set('word', props.text)
+    .set('onClick', props.onEmit)
+    .set('isControl', props.isControl) })
 
 
 const view = (model, dispatch, _) => {
   const word = model.get('word')
   const onClick = model.get('onClick')
-  if(word==='line break' && !onClick)
+  const isControl = model.get('isControl')
+  if(word==='line break' && !isControl)
     return (<br/>)
   return (<span style={{
     cursor:'pointer',
@@ -34,7 +39,7 @@ const view = (model, dispatch, _) => {
     fontSize: '22px',
     backgroundColor: '#f5f5f5',
     boxShadow: '1px 1px 2px #111',
-    transform: 'rotate(-1deg)'}}
+    transform: `rotate(${(Math.random()*.4+.8).toString()}deg)`}}
     onClick={() => onClick(word)}>
     {word}
   </span>)
