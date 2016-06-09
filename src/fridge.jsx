@@ -75,7 +75,7 @@ const readHash = () => {
 
 const stopwords = Immutable.OrderedSet(
   // ['a','s','i','is','me','an','ing','ly','ed','you','the','and','this',
-  ['.', ',', '!', '?','—', 'line break'])
+  ['s','.', ',', '!', '?','—', 'line break'])
 
 const limit = 9
 const Model = Record({
