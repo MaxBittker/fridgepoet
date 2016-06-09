@@ -23,6 +23,13 @@ const init = (props) =>
     .set('isControl', props.isControl) })
 
 
+const clearSelection = () => {
+        if (window.getSelection) window.getSelection().removeAllRanges();
+        else if (document.selection) document.selection.empty();
+    }
+
+
+
 const view = (model, dispatch, _) => {
   const word = model.get('word')
   const onClick = model.get('onClick')
@@ -34,13 +41,13 @@ const view = (model, dispatch, _) => {
     fontFamily: 'Georgia, serif',
     display: 'inline-block',
     border: '1px solid #222',
-    margin: '5px 1px',
+    margin: '5px 2px',
     padding: '2px 4px',
     fontSize: '22px',
     backgroundColor: '#f5f5f5',
     boxShadow: '1px 1px 2px #111',
     transform: `rotate(${(Math.random()*.4+.8).toString()}deg)`}}
-    onClick={() => onClick(word)}>
+    onClick={() => {clearSelection(); onClick(word)}}>
     {word}
   </span>)
 };
