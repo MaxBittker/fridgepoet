@@ -102,7 +102,7 @@ const update = (action, model) => Action.match(action, {
 
 const view = (model, dispatch) => (
   <div style={{
-      height: '90vh',
+      minHeight: '90vh',
       display: 'flex',
       flexDirection:'column',
       justifyContent:'space-around',
