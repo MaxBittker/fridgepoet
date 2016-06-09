@@ -64,13 +64,22 @@ const Action = Union({
   SetModel: null,
 });
 
+
+const readHash = () => {
+  if (location.hash) {
+    return JSON.parse(atob(location.hash.substring(1)));
+  } else {
+    return [];
+  }
+}
+
 const stopwords = Immutable.OrderedSet(
   // ['a','s','i','is','me','an','ing','ly','ed','you','the','and','this',
   ['.', ',', '!', '?','—', 'line break'])
 
 const limit = 9
 const Model = Record({
-  words: Immutable.List([]),
+  words: Immutable.List(readHash()),
   options: Immutable.OrderedSet(sample(classical, limit)),
   chain: 'classical poetry',
 });
@@ -79,8 +88,9 @@ const init = () =>
   Update({ model: Model() });
 
 const update = (action, model) => Action.match(action, {
-  Add: word =>
-    Update({
+  Add: word =>{
+    location.hash = '#' + btoa(JSON.stringify(model.get('words').toArray()));
+    return Update({
         model: model
         .update('words', list => list.push({
           id: list.size,
@@ -89,7 +99,7 @@ const update = (action, model) => Action.match(action, {
         .update('options', list => list.delete(word)
             .takeLast(limit)
             .merge(predictions(modelOptions.get(model.get('chain')), word, 4)))
-      }),
+      })},
 
   Remove: () =>
     Update({ model: model.update('words', list => list.pop()) }),
