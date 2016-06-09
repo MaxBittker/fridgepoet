@@ -67,7 +67,7 @@ const Action = Union({
 
 const readHash = () => {
   if (location.hash) {
-    return JSON.parse(atob(location.hash.substring(1)));
+    return JSON.parse(b64DecodeUnicode(location.hash.substring(1)));
   } else {
     return [];
   }
@@ -88,18 +88,20 @@ const init = () =>
   Update({ model: Model() });
 
 const update = (action, model) => Action.match(action, {
-  Add: word =>{
-    location.hash = '#' + btoa(JSON.stringify(model.get('words').toArray()));
-    return Update({
-        model: model
-        .update('words', list => list.push({
-          id: list.size,
-          word: word.toString()
-        }))
-        .update('options', list => list.delete(word)
-            .takeLast(limit)
-            .merge(predictions(modelOptions.get(model.get('chain')), word, 4)))
-      })},
+  Add: word => {
+    const newModel = Update({
+       model: model
+       .update('words', list => list.push({
+         id: list.size,
+         word: word.toString()
+       }))
+       .update('options', list => list.delete(word)
+           .takeLast(limit)
+           .merge(predictions(modelOptions.get(model.get('chain')), word, 4)))
+     })
+    location.hash = '#' + b64EncodeUnicode(JSON.stringify(newModel.get('model').get('words').toArray()));
+    return newModel
+    },
 
   Remove: () =>
     Update({ model: model.update('words', list => list.pop()) }),
@@ -157,6 +159,18 @@ const view = (model, dispatch) => (
   </div>
 );
 
-
 export default Spindle('Fridge',
   { Action, init, update, view });
+
+
+  function b64EncodeUnicode(str) {
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+      return String.fromCharCode('0x' + p1);
+    }));
+  }
+
+  function b64DecodeUnicode(str) {
+    return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+  }
